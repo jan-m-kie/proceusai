@@ -31,34 +31,36 @@ endpoints:
     # For now, we'll leave it out, letting it default to a wildcard route
     # schemaFilePath: openapi.yaml # Uncomment and specify if you have an OpenAPI file
 
-# +optional Outgoing connection details for the component.
-# Dependencies would go here if your backend connects to other Choreo services or external resources.
-dependencies:
-  # Example: If your backend needs to connect to a database or another Choreo service
-  # connectionReferences:
-  #   - name: my-database-connection
-  #     resourceRef: connection:/MyProject/MyDatabase/v1/some-id/PUBLIC
-  # You can remove or leave this section empty if you don't have dependencies yet.
+# .choreo/component.yaml
+# +required The configuration file schema version
+schemaVersion: 1.2
+
+# +optional Incoming connection details for the component
+endpoints:
+  - name: proceus-ai-api
+    displayName: Proceus AI Vision API
+    service:
+      basePath: /proceus-api
+      port: 9090
+    type: REST
+    networkVisibilities:
+      - Public
+      - Organization
+
+# Removed the entire 'dependencies' section for now.
+# You can add it back later if you need to define connections.
 
 # +optional Defines runtime configurations
 configurations:
-  # +optional List of environment variables to be injected into the component.
   env:
-    # Example: If you need a database URL or an API key
-    # - name: DATABASE_URL
-    #   valueFrom:
-    #     configForm:
-    #       displayName: Database Connection String
-    #       required: true
-    #       type: secret # It's good practice to mark sensitive values as 'secret'
-    - name: FLASK_ENV # A common Flask environment variable
+    - name: FLASK_ENV
       valueFrom:
         configForm:
           displayName: Flask Environment
           required: false
           type: string
-          defaultValue: "development" # Default to development for easier local testing
-
+          defaultValue: "development"
+          
   # +optional List of files to be injected into the component from config form
   # file:
   #   - name: application.yaml
