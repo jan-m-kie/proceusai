@@ -1,3 +1,4 @@
+# .choreo/component.yaml
 # +required The configuration file schema version
 schemaVersion: 1.2
 
@@ -5,86 +6,68 @@ schemaVersion: 1.2
 endpoints:
   # +required Unique name for the endpoint.
   # This name will be used when generating the managed API
-  - name: greeter-sample
+  - name: proceus-ai-api # Changed name to reflect your service
     # +optional Display name for the endpoint.
-    displayName: Go Greeter Sample
+    displayName: Proceus AI Vision API # Descriptive display name
     # +required Service section has the user service endpoint details
     service:
       # +optional Context (base path) of the API that gets exposed via the endpoint.
-      basePath: /greeting-service
+      # This will be the base URL for your API, e.g., your-domain.com/proceus-api
+      basePath: /proceus-api
       # +required Numeric port value that gets exposed via the endpoint
-      port: 9090
+      port: 9090 # Your Flask app is configured to listen on 9090
     # +required Type of traffic that the endpoint is accepting.
     # Allowed values: REST, GraphQL, WS, GRPC, TCP, UDP.
     type: REST
     # +optional Network level visibilities of the endpoint.
     # Accepted values: Project|Organization|Public(Default).
-    networkVisibilities: 
-      - Public
-      - Organization
+    networkVisibilities:
+      - Public # Making it public means it's accessible from the internet
+      - Organization # Also accessible within your Choreo organization
     # +optional Path to the schema definition file. Defaults to wild card route if not provided
     # This is only applicable to REST or WS endpoint types.
     # The path should be relative to the docker context.
-    schemaFilePath: openapi.yaml
+    # If you create an OpenAPI (Swagger) spec later, you would put its path here, e.g., openapi.yaml
+    # For now, we'll leave it out, letting it default to a wildcard route
+    # schemaFilePath: openapi.yaml # Uncomment and specify if you have an OpenAPI file
 
 # +optional Outgoing connection details for the component.
+# Dependencies would go here if your backend connects to other Choreo services or external resources.
 dependencies:
-  # +optional Defines the connection references from the Internal Marketplace.
-  connectionReferences:
-    # +required Name of the connection.
-    - name: hr-connection
-      # +required service identifer of the dependent component.
-      resourceRef: service:/HRProject/UserComponent/v1/ad088/PUBLIC
+  # Example: If your backend needs to connect to a database or another Choreo service
+  # connectionReferences:
+  #   - name: my-database-connection
+  #     resourceRef: connection:/MyProject/MyDatabase/v1/some-id/PUBLIC
+  # You can remove or leave this section empty if you don't have dependencies yet.
 
 # +optional Defines runtime configurations
 configurations:
   # +optional List of environment variables to be injected into the component.
   env:
-    # +required Name of the environment variable
-    - name: HR_SERVICE_URL
-      # +required value source
-      # Allowed value sources: connectionRef, configForm
+    # Example: If you need a database URL or an API key
+    # - name: DATABASE_URL
+    #   valueFrom:
+    #     configForm:
+    #       displayName: Database Connection String
+    #       required: true
+    #       type: secret # It's good practice to mark sensitive values as 'secret'
+    - name: FLASK_ENV # A common Flask environment variable
       valueFrom:
-        # +required Choreo connection value source
-        connectionRef:
-          # +required Choreo connection name to refer the value from
-          name: hr-connection
-          # +required Choreo connection configuration key to refer the value from
-          key: ServiceURL
-    - name: DB_USER
-      # +required value source
-      # Allowed value sources: connectionRef, configForm
-      valueFrom:
-        # +required config form value source
         configForm:
-            # +optional display name inside the config form, name will be shown in config form if not specified
-            displayName: DB User
-            # +optional default value is true if not specified
-            required: false
-            # +optional default value is string if not specified
-            # Allowed types - string, number, boolean, secret
-            type: string
+          displayName: Flask Environment
+          required: false
+          type: string
+          defaultValue: "development" # Default to development for easier local testing
+
   # +optional List of files to be injected into the component from config form
-  file:
-    # +required name of the file
-    - name: application.yaml
-      # +required path to mount the file at
-      mountPath: /src/resources
-      # +required file type
-      # Supported types - yaml, json and toml
-      type: yaml
-      # +required define keys of the file
-      values:
-        # keys of the file
-        # +required at least one key
-        - name: version
-          # +required value source
-          # Allowed value sources: connectionRef, configForm
-          valueFrom:
-            # +required config form value source
-            configForm:
-              # +optional display name inside the config form, name will be shown in config form if not specified
-              displayName: Version
-              # +optional default value is string if not specified
-              # Allowed types - string, number, boolean, secret, object, array
-              type: number
+  # file:
+  #   - name: application.yaml
+  #     mountPath: /src/resources
+  #     type: yaml
+  #     values:
+  #       - name: version
+  #         valueFrom:
+  #           configForm:
+  #             displayName: Version
+  #             type: number
+  # You can remove or leave this section empty if you don't need to inject files.
