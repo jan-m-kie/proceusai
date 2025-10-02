@@ -1,9 +1,0 @@
-version: "1.0"
-name: proceus-ai-backend # This should match the component name you give in Choreo
-language: python
-buildConfiguration:
-  buildScript: "pip install -r requirements.txt"
-deployConfiguration:
-  dockerfile: Dockerfile # Choreo can generate this, but useful to know
-  port: 9090 # The port your Flask app listens on
-  startupScript: "python main.py" # The command to start your app
