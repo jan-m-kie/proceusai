@@ -4,39 +4,6 @@ schemaVersion: 1.2
 
 # +optional Incoming connection details for the component
 endpoints:
-  # +required Unique name for the endpoint.
-  # This name will be used when generating the managed API
-  - name: proceus-ai-api # Changed name to reflect your service
-    # +optional Display name for the endpoint.
-    displayName: Proceus AI Vision API # Descriptive display name
-    # +required Service section has the user service endpoint details
-    service:
-      # +optional Context (base path) of the API that gets exposed via the endpoint.
-      # This will be the base URL for your API, e.g., your-domain.com/proceus-api
-      basePath: /proceus-api
-      # +required Numeric port value that gets exposed via the endpoint
-      port: 9090 # Your Flask app is configured to listen on 9090
-    # +required Type of traffic that the endpoint is accepting.
-    # Allowed values: REST, GraphQL, WS, GRPC, TCP, UDP.
-    type: REST
-    # +optional Network level visibilities of the endpoint.
-    # Accepted values: Project|Organization|Public(Default).
-    networkVisibilities:
-      - Public # Making it public means it's accessible from the internet
-      - Organization # Also accessible within your Choreo organization
-    # +optional Path to the schema definition file. Defaults to wild card route if not provided
-    # This is only applicable to REST or WS endpoint types.
-    # The path should be relative to the docker context.
-    # If you create an OpenAPI (Swagger) spec later, you would put its path here, e.g., openapi.yaml
-    # For now, we'll leave it out, letting it default to a wildcard route
-    # schemaFilePath: openapi.yaml # Uncomment and specify if you have an OpenAPI file
-
-# .choreo/component.yaml
-# +required The configuration file schema version
-schemaVersion: 1.2
-
-# +optional Incoming connection details for the component
-endpoints:
   - name: proceus-ai-api
     displayName: Proceus AI Vision API
     service:
