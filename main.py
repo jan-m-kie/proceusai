@@ -1,0 +1,9 @@
+echo 'from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Hello from Proceus AI Backend!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=9090) # Choreo often uses 9090 as default' > main.py
